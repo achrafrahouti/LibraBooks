@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,42 +28,42 @@ public class BookController {
 	private static final Logger LOGGER=LoggerFactory.getLogger(BookController.class);
 	@Autowired
 	private  BookService bookservice ;
+	
 	@ApiOperation(value = "save a book")
 	@RequestMapping(value = "/books",method = RequestMethod.POST,consumes ={"application/json"})
+	@ResponseStatus(value = HttpStatus.CREATED)
 	public Book saveBook(@RequestBody @Valid final Book book ) throws BookAlreadyExistsException {
-		LOGGER.debug("Received Request to save {} ",book);
+		LOGGER.info("Received Request to save {} ",book);
 		return bookservice.saveBook(book);
 	}
 	
 	@ApiOperation(value = "Retrieve a list of books ." ,responseContainer = "List")
 	@RequestMapping(value = "/books" , method = RequestMethod.GET,produces = {"application/json"})
 	public List<Book> getAll(){
-		LOGGER.debug("Received Request to retrieve all books");
+		LOGGER.info("Received Request to retrieve all books");
 		return  bookservice.getAll();
 	}
 	
 	@ApiOperation(value = "Retrieve a  book with id ." )
-	@RequestMapping(value = "/books/{id}" ,method = RequestMethod.GET,produces = {"application/json"})
-	public Book getBook(@PathVariable Long id) {
-		LOGGER.debug("Received request to retreive a  book  {}",id);
-		return bookservice.getBook(id);
+	@RequestMapping(value = "/books/{id}" ,method = RequestMethod.GET)
+	public Book getBook(@PathVariable Long id) throws BookNotExistsException  {
+		LOGGER.info("Received request to retreive a  book  {}",id);
+		Book book = bookservice.getBook(id);
+		return book;
+	}
+	
+	@ApiOperation(value = "Update a  book ." )
+	@RequestMapping(value = "/books/{id}" ,method = RequestMethod.PUT,consumes = {"application/json"})
+	@ResponseStatus(value=HttpStatus.CREATED)
+	public Book Update(@RequestBody @Valid Book book,@PathVariable Long id) throws BookNotExistsException {
+		LOGGER.info("Received request to update a  book  {}",id);
+		return bookservice.updateBook(book, id);
 	}
 	
 	@RequestMapping(value = "/books/{id}",method = RequestMethod.DELETE)
 	public void deleteBook(@PathVariable Long id) throws BookNotExistsException {
-		LOGGER.debug("Delete a Book {}",id);
+		LOGGER.info("Delete a Book {}",id);
 		bookservice.deleteBook(id);
 	}
-	
-	@ExceptionHandler
-	@ResponseStatus(value = HttpStatus.CONFLICT)
-	public String handleBookAlreadyExistsException(BookAlreadyExistsException e) {
-	return e.getMessage();
-	}
-	
-	@ExceptionHandler
-	@ResponseStatus(value = HttpStatus.CONFLICT)
-	public String handleBookNotExistsException(BookNotExistsException e) {
-	return e.getMessage();
-	}
+
 }

@@ -28,7 +28,7 @@ public class BookServiceImpl implements BookService{
 	@Override
 	@Transactional
 	public Book saveBook(@NotNull @Valid Book book) throws BookAlreadyExistsException {
-		LOGGER.debug("Creating {}",book);
+		LOGGER.info("Creating {}",book);
 		if(bookrepository.existsById(book.getId())) {
 			throw new BookAlreadyExistsException(String.format("there already exists a book with id =%s", book.getId()));
 		}
@@ -38,23 +38,42 @@ public class BookServiceImpl implements BookService{
 	@Override
 	@Transactional(readOnly = true)
 	public List<Book> getAll() {
-		LOGGER.debug("Retrieving all Books");
+		LOGGER.info("Retrieving all Books");
 		return bookrepository.findAll();
 	}
 
 	@Override
-	public Book getBook(Long bookId) {
-		LOGGER.debug("Retrieving  {}", bookId);
-		return bookrepository.getById(bookId);
-	}
-
-	@Override
-	public void deleteBook(final Long bookId) throws  BookNotExistsException{
-		LOGGER.debug("Deleting {} ",bookId);
+	@Transactional(readOnly = true)
+	public Book getBook(Long bookId) throws BookNotExistsException {
+		LOGGER.info("Retrieving  {}", bookId);
 		if(!bookrepository.existsById(bookId)) {
 			throw new BookNotExistsException(String.format("there no book with id =%s", bookId));
 		}
+		return 		bookrepository.getById(bookId);
+	}
+
+	@Override
+	@Transactional
+	public void deleteBook(final Long bookId) throws  BookNotExistsException{
+		LOGGER.info("Deleting {} ",bookId);
+		if(!bookrepository.existsById(bookId)) {
+			throw new BookNotExistsException(String.format("Book  With id = %s don't exist", bookId));
+		}
 		bookrepository.deleteById(bookId);
+		
+	}
+
+	@Override
+	public Book updateBook(Book book, Long id) throws BookNotExistsException {
+		
+		LOGGER.info("Updating {}",book);
+		
+//			throw new BookNotExistsException(String.format("Book  With id = %s don't exist", id));
+			return bookrepository.findById(id).map(x->{
+				x.setAuthor(book.getAuthor());
+				x.setTitle(book.getTitle());
+				return bookrepository.save(x);
+			}).orElseThrow(()->new BookNotExistsException(String.format("Book  With id = %s don't exist", id)));
 		
 	}
 
