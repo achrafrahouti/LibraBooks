@@ -64,12 +64,11 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
+	@Transactional
 	public Book updateBook(Book book, Long id) throws BookNotExistsException {
 		
 		LOGGER.info("Updating {}",book);
-		
-//			throw new BookNotExistsException(String.format("Book  With id = %s don't exist", id));
-			return bookrepository.findById(id).map(x->{
+					return bookrepository.findById(id).map(x->{
 				x.setAuthor(book.getAuthor());
 				x.setTitle(book.getTitle());
 				return bookrepository.save(x);
