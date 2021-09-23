@@ -17,4 +17,7 @@ public interface BookService {
 	Book getBook(Long bookId) throws BookNotExistsException;
 	Book updateBook(Book book,Long id) throws BookNotExistsException;
 	void deleteBook(final Long bookId) throws BookNotExistsException;
+
+	List<Book> findByTitle(String title);
+    List<Book> findByAuthor(String author);
 }

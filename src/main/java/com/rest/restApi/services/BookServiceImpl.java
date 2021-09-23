@@ -76,4 +76,20 @@ public class BookServiceImpl implements BookService{
 		
 	}
 
+	@Override
+	@Transactional(readOnly=true)
+	public List<Book> findByTitle(String title) {
+
+		LOGGER.info("Retrieving Books with Title = {}",title);
+		return bookrepository.findByTitle(title);
+	}
+
+	@Override
+	public List<Book> findByAuthor(String author) {
+
+		LOGGER.info("Retrieving Books with Author = {}",author);
+		
+		return bookrepository.findByAuthor(author);
+	}
+
 }
