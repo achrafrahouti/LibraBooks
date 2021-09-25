@@ -1,5 +1,6 @@
 package com.rest.restApi.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,11 +44,25 @@ public class BookController {
 	
 	@ApiOperation(value = "Retrieve a list of books ." ,responseContainer = "List")
 	@RequestMapping(value = "/books" , method = RequestMethod.GET,produces = {"application/json"})
-	public List<Book> getAll(){
-		LOGGER.info("Received Request to retrieve all books");
-		return  bookservice.getAll();
-	}
+        public ResponseEntity<List<Book>> getAll() {
+			LOGGER.info("Received Request to retrieve all books");
+
+            try {
+                List<Book> items = new ArrayList<Book>();
+    
+                bookservice.getAll().forEach(items::add);
+    
+                if (items.isEmpty())
+                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    
+                return new ResponseEntity<>(items, HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
 	
+
+		
 	@ApiOperation(value = "Retrieve a  book with id ." )
 	@RequestMapping(value = "/books/{id}" ,method = RequestMethod.GET)
 	public Book getBook(@PathVariable Long id) throws BookNotExistsException  {

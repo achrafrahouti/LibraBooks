@@ -1,4 +1,4 @@
-package com.rest.restApi.services;
+package com.rest.restApi.services.servicesimpl;
 
 import java.util.List;
 import javax.validation.Valid;
@@ -15,6 +15,7 @@ import com.rest.restApi.entities.Book;
 import com.rest.restApi.exceptions.BookAlreadyExistsException;
 import com.rest.restApi.exceptions.BookNotExistsException;
 import com.rest.restApi.reposotiry.BookRepository;
+import com.rest.restApi.services.BookService;
 
 @Service
 @Validated

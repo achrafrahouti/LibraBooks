@@ -2,6 +2,7 @@ package com.rest.restApi.entities;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,12 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import org.springframework.lang.NonNull;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity(name = "USER")
 public class CustomUser {
     
@@ -23,18 +23,20 @@ public class CustomUser {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NonNull
+    @NotNull
     @Size(max = 10)
     private String firstName;
   
-    @NonNull
+    @NotNull
     @Size(max = 10)  
     private String lastName;
     
-    @NonNull
-    @Email
+    @NotNull
+    @Column(unique = true)
+    @Email(message = "must be a valid email")
     private String email;
-    @JsonIgnore(value = true)
+
+    @NotNull
     private String password;
 
     @ManyToMany

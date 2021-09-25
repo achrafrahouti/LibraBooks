@@ -1,4 +1,4 @@
-package com.rest.restApi.services;
+package com.rest.restApi.services.servicesimpl;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import com.rest.restApi.entities.Role;
 import com.rest.restApi.exceptions.RoleNotExistsException;
 import com.rest.restApi.reposotiry.RoleRepository;
+import com.rest.restApi.services.RoleService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
