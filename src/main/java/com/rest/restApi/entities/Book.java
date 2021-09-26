@@ -1,12 +1,17 @@
 package com.rest.restApi.entities;
 
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
@@ -26,6 +31,10 @@ public class Book {
 	@Size(max = 64,message = "max is 64 alpha")
 	@Column(name = "title", nullable = false)
 	private String title;
+
+	@ManyToMany(mappedBy = "books")
+	private Set<Offer> offers;
+
 
 	public Book() {
 		
@@ -69,4 +78,19 @@ public class Book {
 
 	
 	
+
+    /**
+     * @return Set<Offer> return the offers
+     */
+    public Set<Offer> getOffers() {
+        return offers;
+    }
+
+    /**
+     * @param offers the offers to set
+     */
+    public void setOffers(Set<Offer> offers) {
+        this.offers = offers;
+    }
+
 }

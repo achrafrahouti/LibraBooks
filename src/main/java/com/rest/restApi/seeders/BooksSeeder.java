@@ -1,12 +1,25 @@
 package com.rest.restApi.seeders;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Set;
+
 import javax.transaction.Transactional;
 
 import com.rest.restApi.entities.Book;
+import com.rest.restApi.entities.CustomUser;
+import com.rest.restApi.entities.Offer;
 import com.rest.restApi.entities.Role;
 import com.rest.restApi.exceptions.BookAlreadyExistsException;
+import com.rest.restApi.reposotiry.OfferRepository;
 import com.rest.restApi.services.BookService;
 import com.rest.restApi.services.RoleService;
+import com.rest.restApi.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -25,6 +38,11 @@ public class BooksSeeder  implements ApplicationListener<ContextRefreshedEvent>{
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private OfferRepository offerRepository;
+    @Autowired
+    private UserService userService;
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -49,8 +67,17 @@ public class BooksSeeder  implements ApplicationListener<ContextRefreshedEvent>{
             roleService.saveRole(new Role("VIEWER"));
             roleService.saveRole(new Role("GUEST"));
 
-        } catch (BookAlreadyExistsException e) {
-            // TODO Auto-generated catch block
+            // insert a user 
+            Set<Role> roles=Set.of(roleService.getRole(1l));
+            CustomUser user=new CustomUser("firstName", "lastName", "email-achraf@email.com", "password", roles);
+            userService.saveCustomUser(user);
+
+
+            // Set<Book> bto=Set.of(bookService.getBook(1L));
+            // Date d=new Date(System.currentTimeMillis()+10000);
+            // System.out.println("hello \n\n"+d);
+            // offerRepository.save(new Offer("address", d, user, bto));
+        }catch (Exception e) {
             e.printStackTrace();
         }
 

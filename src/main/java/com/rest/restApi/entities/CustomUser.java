@@ -4,18 +4,23 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 @Entity(name = "USER")
 public class CustomUser {
     
@@ -46,6 +51,8 @@ public class CustomUser {
         inverseJoinColumns = @JoinColumn(name="role_id",referencedColumnName = "id"))
     private Set<Role> roles;
 
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private Set<Offer> offers;
 
     public CustomUser() {
     }
@@ -58,6 +65,18 @@ public class CustomUser {
         this.email = email;
         this.password = password;
         this.roles = roles;
+    }
+
+
+    public CustomUser(@NotNull @Size(max = 10) String firstName, @NotNull @Size(max = 10) String lastName,
+            @NotNull @Email(message = "must be a valid email") String email, @NotNull String password, Set<Role> roles,
+            Set<Offer> offers) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.offers = offers;
     }
 
 
@@ -128,5 +147,20 @@ public class CustomUser {
     }
 
     
+
+
+    /**
+     * @return Set<Offer> return the offers
+     */
+    public Set<Offer> getOffers() {
+        return offers;
+    }
+
+    /**
+     * @param offers the offers to set
+     */
+    public void setOffers(Set<Offer> offers) {
+        this.offers = offers;
+    }
 
 }
