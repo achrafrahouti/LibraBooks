@@ -47,7 +47,6 @@ class resourceNameController {
         Optional<Offer> existingItemOptional = repository.findById(id);
 
         if (existingItemOptional.isPresent()) {
-            System.out.println(existingItemOptional.get().getUser());
             return new ResponseEntity<>(existingItemOptional.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

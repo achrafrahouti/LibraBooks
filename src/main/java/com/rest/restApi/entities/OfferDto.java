@@ -1,73 +1,49 @@
 package com.rest.restApi.entities;
 
-
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.Future;
+public class OfferDto implements Serializable{
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import org.hibernate.annotations.CreationTimestamp;
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
-@Entity
-public class Offer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String address;
     
-    @CreationTimestamp
     private Date created_at;
 
-    @Future
     private Date finish_at;
 
-    @ManyToOne
-    @JoinColumn(name = "creator")
-    private CustomUser user;
+    private Long user;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<Long> books;
     
-    @JoinTable(
-        name = "book_offer",
-        joinColumns = @JoinColumn(name="offer_id",referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name="book_id",referencedColumnName = "id"))
-    private Set<Book> books;
-    public Offer() {
+
+    public OfferDto() {
     }
 
-
-    public Offer(String address,  Date finish_at, CustomUser user, Set<Book> books) {
+    public OfferDto(Long id, String address, Date created_at, Date finish_at, Long user, Set<Long> books) {
+        this.id = id;
         this.address = address;
+        this.created_at = created_at;
         this.finish_at = finish_at;
         this.user = user;
         this.books = books;
     }
 
+    /**
+     * @return Long return the id
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * @param id the id to set
+     */
     public void setId(Long id) {
         this.id = id;
     }
-
-    
 
     /**
      * @return String return the address
@@ -112,37 +88,36 @@ public class Offer {
     }
 
     /**
-     * @return CustomUser return the user
+     * @return Long return the user
      */
-    public CustomUser getUser() {
+    public Long getUser() {
         return user;
     }
 
     /**
      * @param user the user to set
      */
-    public void setUser(CustomUser user) {
+    public void setUser(Long user) {
         this.user = user;
     }
 
     /**
      * @return Set<Book> return the books
      */
-    public Set<Book> getBooks() {
+    public Set<Long> getBooks() {
         return books;
     }
 
     /**
      * @param books the books to set
      */
-    public void setBooks(Set<Book> books) {
+    public void setBooks(Set<Long> books) {
         this.books = books;
     }
 
-
     @Override
     public String toString() {
-        return "Offer [address=" + address + ", books=" + books + ", created_at=" + created_at + ", finish_at="
+        return "OfferDto [address=" + address + ", books=" + books + ", created_at=" + created_at + ", finish_at="
                 + finish_at + ", id=" + id + ", user=" + user + "]";
     }
 
