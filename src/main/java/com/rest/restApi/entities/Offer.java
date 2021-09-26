@@ -42,7 +42,6 @@ public class Offer {
     private CustomUser user;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    
     @JoinTable(
         name = "book_offer",
         joinColumns = @JoinColumn(name="offer_id",referencedColumnName = "id"),

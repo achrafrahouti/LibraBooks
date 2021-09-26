@@ -38,4 +38,11 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	public ExceptionResponse handleUserNotExistsException(CustomUserNotFoundException e,WebRequest request) {
 		return new ExceptionResponse(new Date(), e.getMessage(),"User Not Exists   " + request.getDescription(false));
 	}
+
+
+	@ExceptionHandler(OfferNotFoundException.class)
+	@ResponseStatus(value = HttpStatus.NOT_FOUND)
+	public ExceptionResponse handleOfferNotExistsException(OfferNotFoundException e,WebRequest request) {
+		return new ExceptionResponse(new Date(), e.getMessage(),"Offer Not Exists   " + request.getDescription(false));
+	}
 }
