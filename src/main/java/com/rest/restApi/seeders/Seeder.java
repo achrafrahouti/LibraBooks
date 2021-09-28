@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class BooksSeeder  implements ApplicationListener<ContextRefreshedEvent>{
+public class Seeder  implements ApplicationListener<ContextRefreshedEvent>{
 
 
     private boolean alreadysetup;
