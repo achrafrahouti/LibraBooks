@@ -16,6 +16,8 @@ public interface OfferService {
     void deleteById(Long id) throws OfferNotFoundException;
     Offer update(Long id,Offer offer) throws OfferNotFoundException;
     List<Offer> findByAddress(String address) ;
+    List<Offer> findByBookTitle(String title);
+    List<Offer> findByBookAuthor(String author);
 
 
 }

@@ -1,12 +1,6 @@
 package com.rest.restApi.seeders;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -15,9 +9,8 @@ import com.rest.restApi.entities.Book;
 import com.rest.restApi.entities.CustomUser;
 import com.rest.restApi.entities.Offer;
 import com.rest.restApi.entities.Role;
-import com.rest.restApi.exceptions.BookAlreadyExistsException;
-import com.rest.restApi.reposotiry.OfferRepository;
 import com.rest.restApi.services.BookService;
+import com.rest.restApi.services.OfferService;
 import com.rest.restApi.services.RoleService;
 import com.rest.restApi.services.UserService;
 
@@ -40,9 +33,10 @@ public class BooksSeeder  implements ApplicationListener<ContextRefreshedEvent>{
     private RoleService roleService;
 
     @Autowired
-    private OfferRepository offerRepository;
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    OfferService offerService;
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -73,10 +67,9 @@ public class BooksSeeder  implements ApplicationListener<ContextRefreshedEvent>{
             userService.saveCustomUser(user);
 
 
-            // Set<Book> bto=Set.of(bookService.getBook(1L));
-            // Date d=new Date(System.currentTimeMillis()+10000);
-            // System.out.println("hello \n\n"+d);
-            // offerRepository.save(new Offer("address", d, user, bto));
+            Set<Book> bto=Set.of(bookService.getBook(1L),bookService.getBook(2L));
+            Date d=new Date(System.currentTimeMillis()+10000);
+            offerService.save(new Offer("Taounate", d, user, bto));
         }catch (Exception e) {
             e.printStackTrace();
         }

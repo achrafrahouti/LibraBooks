@@ -88,8 +88,29 @@ public class OfferController {
     }
 
     @GetMapping(value = "/address", produces = { "application/json" })
-    public List<Offer> getBooksByAuthor(@RequestParam(value = "address") String address) {
-        LOGGER.info("Get List of Offer with a address= {}", address);
-        return repository.findByAddress(address.toUpperCase());
+    public ResponseEntity<List<Offer>> getBooksByAuthor(@RequestParam(value = "address") String address) {
+        LOGGER.info("Get List of Offer By a address= {}", address);
+        List<Offer> findByAddress = repository.findByAddress(address.toUpperCase());
+        if(findByAddress.isEmpty())
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    return new ResponseEntity<List<Offer>>(findByAddress, HttpStatus.OK) ;
+    }
+    
+    @GetMapping(value = "/book/title", produces = { "application/json" })
+    public ResponseEntity<List<Offer>> getBooksByBookTitle(@RequestParam(value = "title") String title) {
+        LOGGER.info("Get List of Offer By a Book Title = {}", title);
+        List<Offer> findByBookTitle = repository.findByBookTitle(title);
+        if(findByBookTitle.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<List<Offer>>(findByBookTitle, HttpStatus.OK) ;
+    }
+
+    @GetMapping(value = "/book/author", produces = { "application/json" })
+    public ResponseEntity<List<Offer>> getBooksByBookAuthor(@RequestParam(value = "author") String author) {
+        LOGGER.info("Get List of Offer By a Book Author = {}", author);
+        List<Offer> findByBookAuthor = repository.findByBookAuthor(author);
+        if(findByBookAuthor.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<List<Offer>>(findByBookAuthor, HttpStatus.OK) ;
     }
 }
