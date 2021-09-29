@@ -3,6 +3,8 @@ package com.rest.restApi.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.rest.restApi.entities.CustomUser;
 import com.rest.restApi.exceptions.CustomUserNotFoundException;
 import com.rest.restApi.exceptions.EmailAlreadyExistsException;
@@ -51,7 +53,7 @@ public class UserController {
 
     @ApiOperation(value = "save a user")
     @PostMapping(value = "/users", consumes = { "application/json" })
-    public ResponseEntity<CustomUser> create(@RequestBody CustomUser user) throws EmailAlreadyExistsException {
+    public ResponseEntity<CustomUser> create(@RequestBody @Valid CustomUser user) throws EmailAlreadyExistsException {
         try {
             CustomUser savedUser = userService.saveCustomUser(user);
             return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
