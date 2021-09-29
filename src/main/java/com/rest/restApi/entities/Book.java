@@ -33,9 +33,6 @@ public class Book {
 	@Column(name = "title", nullable = false)
 	private String title;
 
-	@ManyToMany(mappedBy = "books")
-	private Set<Offer> offers;
-
 
 	public Book() {
 		
@@ -76,22 +73,5 @@ public class Book {
 	public String toString() {
 		return "Book [Id=" + Id + ", author=" + author + ", title=" + title + "]";
 	}
-
-	
-	
-
-    /**
-     * @return Set<Offer> return the offers
-     */
-    public Set<Offer> getOffers() {
-        return offers;
-    }
-
-    /**
-     * @param offers the offers to set
-     */
-    public void setOffers(Set<Offer> offers) {
-        this.offers = offers;
-    }
 
 }

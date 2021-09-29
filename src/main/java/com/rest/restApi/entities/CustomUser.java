@@ -51,8 +51,6 @@ public class CustomUser {
         inverseJoinColumns = @JoinColumn(name="role_id",referencedColumnName = "id"))
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-    private Set<Offer> offers;
 
     public CustomUser() {
     }
@@ -67,17 +65,6 @@ public class CustomUser {
         this.roles = roles;
     }
 
-
-    public CustomUser(@NotNull @Size(max = 10) String firstName, @NotNull @Size(max = 10) String lastName,
-            @NotNull @Email(message = "must be a valid email") String email, @NotNull String password, Set<Role> roles,
-            Set<Offer> offers) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-        this.offers = offers;
-    }
 
 
     public Long getId() {
@@ -146,21 +133,6 @@ public class CustomUser {
                 + ", password=" + password + ", roles=" + roles + "]";
     }
 
-    
 
-
-    /**
-     * @return Set<Offer> return the offers
-     */
-    public Set<Offer> getOffers() {
-        return offers;
-    }
-
-    /**
-     * @param offers the offers to set
-     */
-    public void setOffers(Set<Offer> offers) {
-        this.offers = offers;
-    }
 
 }

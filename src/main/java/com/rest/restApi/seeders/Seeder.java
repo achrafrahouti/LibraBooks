@@ -1,16 +1,13 @@
 package com.rest.restApi.seeders;
 
-import java.util.Date;
 import java.util.Set;
 
 import javax.transaction.Transactional;
 
 import com.rest.restApi.entities.Book;
 import com.rest.restApi.entities.CustomUser;
-import com.rest.restApi.entities.Offer;
 import com.rest.restApi.entities.Role;
 import com.rest.restApi.services.BookService;
-import com.rest.restApi.services.OfferService;
 import com.rest.restApi.services.RoleService;
 import com.rest.restApi.services.UserService;
 
@@ -35,8 +32,6 @@ public class Seeder  implements ApplicationListener<ContextRefreshedEvent>{
     @Autowired
     private UserService userService;
 
-    @Autowired
-    OfferService offerService;
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -66,10 +61,6 @@ public class Seeder  implements ApplicationListener<ContextRefreshedEvent>{
             CustomUser user=new CustomUser("firstName", "lastName", "email-achraf@email.com", "password", roles);
             userService.saveCustomUser(user);
 
-
-            Set<Book> bto=Set.of(bookService.getBook(1L),bookService.getBook(2L));
-            Date d=new Date(System.currentTimeMillis()+10000);
-            offerService.save(new Offer("Taounate", d, user, bto));
         }catch (Exception e) {
             e.printStackTrace();
         }
