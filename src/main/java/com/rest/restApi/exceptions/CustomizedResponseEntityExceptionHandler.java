@@ -14,35 +14,43 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestController
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-	
 	@ExceptionHandler(BookAlreadyExistsException.class)
 	@ResponseStatus(value = HttpStatus.CONFLICT)
-	public ExceptionResponse handleBookAlreadyExistsException(BookAlreadyExistsException e,WebRequest request) {
-	return new ExceptionResponse(new Date(), e.getMessage(),"Book Already Exists   " + request.getDescription(false));
+	public ExceptionResponse handleBookAlreadyExistsException(BookAlreadyExistsException e, WebRequest request) {
+		return new ExceptionResponse(new Date(), e.getMessage(),
+				"Book Already Exists   " + request.getDescription(false));
 	}
-	
+
 	@ExceptionHandler(BookNotExistsException.class)
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
-	public ExceptionResponse handleBookNotExistsException(BookNotExistsException e,WebRequest request) {
-		return new ExceptionResponse(new Date(), e.getMessage(),"Book Not Exists   " + request.getDescription(false));
+	public ExceptionResponse handleBookNotExistsException(BookNotExistsException e, WebRequest request) {
+		return new ExceptionResponse(new Date(), e.getMessage(), "Book Not Found   " + request.getDescription(false));
 	}
 
 	@ExceptionHandler(EmailAlreadyExistsException.class)
 	@ResponseStatus(value = HttpStatus.CONFLICT)
-	public ExceptionResponse handleEmailAlreadyExistsException(EmailAlreadyExistsException e,WebRequest request) {
-	return new ExceptionResponse(new Date(), e.getMessage(),"Email Already Used   " + request.getDescription(false));
+	public ExceptionResponse handleEmailAlreadyExistsException(EmailAlreadyExistsException e, WebRequest request) {
+		return new ExceptionResponse(new Date(), e.getMessage(),
+				"Email Already Used   " + request.getDescription(false));
 	}
 
 	@ExceptionHandler(CustomUserNotFoundException.class)
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
-	public ExceptionResponse handleUserNotExistsException(CustomUserNotFoundException e,WebRequest request) {
-		return new ExceptionResponse(new Date(), e.getMessage(),"User Not Exists   " + request.getDescription(false));
+	public ExceptionResponse handleUserNotExistsException(CustomUserNotFoundException e, WebRequest request) {
+		return new ExceptionResponse(new Date(), e.getMessage(), "User Not Found   " + request.getDescription(false));
 	}
 
+	@ExceptionHandler(CategoryAlreadyExistException.class)
+	@ResponseStatus(value = HttpStatus.CONFLICT)
+	public ExceptionResponse handleCategoryAlreadyExistsException(CategoryAlreadyExistException e, WebRequest request) {
+		return new ExceptionResponse(new Date(), e.getMessage(),
+				"Category Already exist   " + request.getDescription(false));
+	}
 
-	@ExceptionHandler(OfferNotFoundException.class)
+	@ExceptionHandler(CategoryNotFoundException.class)
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
-	public ExceptionResponse handleOfferNotExistsException(OfferNotFoundException e,WebRequest request) {
-		return new ExceptionResponse(new Date(), e.getMessage(),"Offer Not Exists   " + request.getDescription(false));
+	public ExceptionResponse handleCategoryNotFoundException(CategoryNotFoundException e, WebRequest request) {
+		return new ExceptionResponse(new Date(), e.getMessage(),
+				"Category  Not Found   " + request.getDescription(false));
 	}
 }
