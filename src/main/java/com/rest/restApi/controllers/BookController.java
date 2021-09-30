@@ -30,7 +30,7 @@ public class BookController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BookController.class);
 	@Autowired
-	private BookService bookservice;
+	private BookService bookService;
 
 	@ApiOperation(value = "save a book")
 	@RequestMapping(value = "/books", method = RequestMethod.POST, consumes = { "application/json" })
@@ -39,7 +39,7 @@ public class BookController {
 		LOGGER.info("Received Request to save {} ", book);
 		book.setTitle(book.getTitle().toUpperCase());
 		book.setAuthor(book.getAuthor().toUpperCase());
-		return bookservice.saveBook(book);
+		return bookService.saveBook(book);
 	}
 
 	@ApiOperation(value = "Retrieve a list of books .", responseContainer = "List")
@@ -50,7 +50,7 @@ public class BookController {
 		try {
 			List<Book> items = new ArrayList<Book>();
 
-			bookservice.getAll().forEach(items::add);
+			bookService.getAll().forEach(items::add);
 
 			if (items.isEmpty())
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -61,11 +61,11 @@ public class BookController {
 		}
 	}
 
-	@ApiOperation(value = "Retrieve a  book with id .")
+	@ApiOperation(value = "Retrieve a  book By id .")
 	@RequestMapping(value = "/books/{id}", method = RequestMethod.GET)
 	public Book getBook(@PathVariable Long id) throws BookNotExistsException {
-		LOGGER.info("Received request to retreive a  book  {}", id);
-		Book book = bookservice.getBook(id);
+		LOGGER.info("Received request to retrieve a  book  {}", id);
+		Book book = bookService.getBook(id);
 		return book;
 	}
 
@@ -74,28 +74,41 @@ public class BookController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public Book Update(@RequestBody @Valid Book book, @PathVariable Long id) throws BookNotExistsException {
 		LOGGER.info("Received request to update a  book  {}", id);
-		return bookservice.updateBook(book, id);
+		return bookService.updateBook(book, id);
 	}
 
 	@ApiOperation(value = "Delete  a  book .")
 	@RequestMapping(value = "/books/{id}", method = RequestMethod.DELETE)
 	public void deleteBook(@PathVariable Long id) throws BookNotExistsException {
 		LOGGER.info("Delete a Book {}", id);
-		bookservice.deleteBook(id);
+		bookService.deleteBook(id);
 	}
 
-	@ApiOperation(value = "Get List of Books with a title .")
+	@ApiOperation(value = "Get List of Books By a title .")
 	@RequestMapping(value = "/books/title", method = RequestMethod.GET, produces = { "application/json" })
 	public List<Book> getBooksByTitle(@RequestParam(value = "title") String title) {
-		LOGGER.info("Get List of Books with a title= {}", title);
-		return bookservice.findByTitle(title.toUpperCase());
+		LOGGER.info("Get List of Books By a title= {}", title);
+		return bookService.findByTitle(title.toUpperCase());
 	}
 
-	@ApiOperation(value = "Get List of Books with a Author .")
+	@ApiOperation(value = "Get List of Books By a Author .")
 	@RequestMapping(value = "/books/author", method = RequestMethod.GET, produces = { "application/json" })
 	public List<Book> getBooksByAuthor(@RequestParam(value = "author") String author) {
-		LOGGER.info("Get List of Books with a author= {}", author);
-		return bookservice.findByAuthor(author.toUpperCase());
+		LOGGER.info("Get List of Books By a author= {}", author);
+		return bookService.findByAuthor(author.toUpperCase());
 	}
 
+	@ApiOperation(value = "Get List of Books By a Category name.")
+	@RequestMapping(value = "/books/category", method = RequestMethod.GET, produces = { "application/json" })
+	public ResponseEntity<List<Book>> getBooksByCategory(@RequestParam(value = "category") String category) {
+		LOGGER.info("Get List of Books By a category= {}", category);
+		List<Book> books= bookService.findByCategory(category);
+
+		try{		if (books.isEmpty())
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<List<Book>>(books, HttpStatus.OK);
+	}catch(Exception e){
+		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	}
 }

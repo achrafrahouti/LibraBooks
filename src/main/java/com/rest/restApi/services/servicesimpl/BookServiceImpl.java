@@ -1,5 +1,6 @@
 package com.rest.restApi.services.servicesimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -81,16 +82,30 @@ public class BookServiceImpl implements BookService{
 	@Transactional(readOnly=true)
 	public List<Book> findByTitle(String title) {
 
-		LOGGER.info("Retrieving Books with Title = {}",title);
+		LOGGER.info("Retrieving Books By Title = {}",title);
 		return bookrepository.findByTitle(title);
 	}
 
 	@Override
 	public List<Book> findByAuthor(String author) {
 
-		LOGGER.info("Retrieving Books with Author = {}",author);
+		LOGGER.info("Retrieving Books By Author = {}",author);
 		
 		return bookrepository.findByAuthor(author);
 	}
+
+	@Override
+	public List<Book> findByCategory(String category) {
+		LOGGER.info("Retrieving Books By Category = {}",category);
+		List<Book> books=new ArrayList<>();
+		bookrepository.findAll().forEach((x)->{
+			if (x.getCategory().getName().equalsIgnoreCase(category)) {
+				books.add(x);
+			}
+		});
+		return books;
+	}
+
+	
 
 }
